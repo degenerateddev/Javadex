@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+
+  pokedex_db:
+    image: postgres-15.2
+    container_name: 'pokedex_db'
+    command: -p 1337
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - '1337:1337'
+    env_file:
+      - .env
+
+  pokedex_app:
+    container_name: 'pokedex_app'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/pokedex_app
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - pokedex_db
