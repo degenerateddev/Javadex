@@ -3,6 +3,7 @@ package database;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,18 +26,23 @@ public class DB {
 	    connection = DriverManager.getConnection(dbUrl, username, password);
 	    System.out.println("Database connection established...");
 	    
-	    try (ResultSet resultSet = connection.getMetaData().getTables(null, null, "pokedex", null)) {
-		if (resultSet.next()) {
-		    System.out.println("Table already exists.");
-	            return;
-	        } else {
-	            setup("pokedex");
-	        }
+	    DatabaseMetaData metadata = connection.getMetaData();
+	    ResultSet pokedexResults = metadata.getTables(null, null, "pokedex", null);
+	    if (!pokedexResults.next()) {
+		System.out.println("Pokedex table exists. Skipping...");
 		
-	    } catch (SQLException e) {
-		System.out.println("Failed to check if the table exists.");
-	        e.printStackTrace();
-	        return;
+	    } else {
+		System.out.println("Creating pokedex table...");
+		setup("pokedex");
+	    }
+	    
+	    ResultSet teamsResults = metadata.getTables(null, null, "teams", null);
+	    if (!teamsResults.next()) {
+		System.out.println("Teams table exists. Skipping...");
+		
+	    } else {
+		System.out.println("Creating teams table...");
+		setup("teams");
 	    }
 	    
 	} catch (SQLException e) {
@@ -47,7 +53,7 @@ public class DB {
     private void setup(String table) {
 	if (table.equals("pokedex")) {
 	    String sql = "CREATE TABLE pokemon (" +
-		    "id INTEGER PRIMARY KEY AUTO_INCREMENT," +
+		    "id SERIAL PRIMARY KEY," +
 		    "name VARCHAR(255) NOT NULL," +
 		    "description VARCHAR(255) NOT NULL," +
 		    "image VARCHAR(255) NOT NULL," +
@@ -67,7 +73,20 @@ public class DB {
 	    }
 	    
 	} else if (table.equals("teams")) {
+	    String sql = "CREATE TABLE team (" +
+		    "id SERIAL PRIMARY KEY," +
+		    "name VARCHAR(255) NOT NULL," +
+		    "pokemon_id INT," +
+		    "FOREIGN KEY (pokemon_id) REFERENCES pokemon(id)" +
+		    ")";
 	    
+	    try (Statement statement = connection.createStatement()) {
+		statement.executeUpdate(sql);
+		System.out.println("Pokemon table created successfully!");
+		
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    }
 	    
 	}
     }

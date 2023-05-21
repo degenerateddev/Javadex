@@ -33,7 +33,7 @@ public class Window extends JFrame {
 	Navbar bar = new Navbar();
 	this.setJMenuBar(bar);
 	
-	this.setContentPane(new ImagePanel());
+	this.setContentPane(new BackgroundImage());
 	
 	JPanel cards = new JPanel(new CardLayout());
 	
