@@ -16,7 +16,7 @@ enum Attacks {
 }
 
 public class Pokémon {
-    private final int id;
+    public final int id;
     public final String name;
     public final String description;
     public final String image;

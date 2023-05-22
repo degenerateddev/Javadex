@@ -15,7 +15,7 @@ public class BackgroundImage extends JComponent {
     public BackgroundImage() {
 	File bgimage = null;
 	
-	File directory = new File("src/bin/");
+	File directory = new File("src/bin/");	// shouldn't reference "src" in code (won't exist after exporting the project)
 	
 	if (directory.isDirectory()) {
 	    File[] files = directory.listFiles();

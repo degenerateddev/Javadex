@@ -1,7 +1,9 @@
 package database;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -20,6 +22,9 @@ public class DB {
     String dbUrl = "jdbc:postgresql://0.0.0.0:1337/" + db;
     
     static Connection connection;
+    boolean connected = false;
+    
+    public File fallbackFile = new File("data/fallbackFile.txt");
     
     public DB() {
 	try {
@@ -45,10 +50,29 @@ public class DB {
 		setup("teams");
 	    }
 	    
+	    connected = true;
+	    
 	} catch (SQLException e) {
-	    e.printStackTrace();
+	    System.out.println("Could not find running PostgreSQL database...");
+	    System.out.println("Using fallback text file");
+	    
+	    try {
+		if (fallbackFile.createNewFile()) {
+		    System.out.println("Fallback file created");
+		} else {
+		    System.out.println("Fallback file found");
+		}
+		
+	    } catch (IOException e1) {
+		e1.printStackTrace();
+		System.exit(0);
+	    }
 	}
     }
+    
+    /*
+     * Database setup and base methods
+     */
     
     private void setup(String table) {
 	if (table.equals("pokedex")) {
@@ -92,10 +116,12 @@ public class DB {
     }
     
     public void disconnect() {
-	try {
-	    connection.close();
-	} catch (SQLException e) {
-	    e.printStackTrace();
+	if (connected) {
+	    try {
+		connection.close();
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    }
 	}
     }
     
@@ -129,6 +155,10 @@ public class DB {
 	
 	return result;
     }
+    
+    /*
+     * Database CRUD operations
+     */
     
     public static ResultSet getAll() {
 	String sql = "SELECT * FROM pokedex";
@@ -166,6 +196,22 @@ public class DB {
     }
     
     public static void remove(Pokémon pokémon) {
-	String sql = "DELETE FROM pokedex WHERE id=";
+	String sql = "DELETE FROM pokedex WHERE id=" + pokémon.id;
+    }
+    
+    /*
+     * Fallback file methods
+     */
+    
+    public static void getAllFromFile(Pokémon pokémon) {
+	
+    }
+    
+    public static void addToFile(Pokémon pokémon) {
+	
+    }
+    
+    public static void removeFromFile(Pokémon pokémon) {
+	
     }
 }
