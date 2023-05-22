@@ -23,20 +23,14 @@ public class Navbar extends JMenuBar{
 	JMenu pokedex = new JMenu("Pokédex");
 	JMenuItem openPokedex = new JMenuItem("Open");
 	JMenuItem addToPokedex = new JMenuItem("Add");
-	JMenuItem editPokedex = new JMenuItem("Edit");
-	JMenuItem removeFromPokedex = new JMenuItem("Remove");
 	pokedex.add(openPokedex);
 	pokedex.add(addToPokedex);
-	pokedex.add(editPokedex);
-	pokedex.add(removeFromPokedex);
 	
 	JMenu team = new JMenu("Team");
 	JMenuItem openTeam = new JMenuItem("Open");
 	JMenuItem addToTeam = new JMenuItem("Add");
-	JMenuItem removeFromTeam = new JMenuItem("Remove");
 	team.add(openTeam);
 	team.add(addToTeam);
-	team.add(removeFromTeam);
 	
 	JMenu export = new JMenu("Export");
 	JMenuItem exportPokedex = new JMenuItem("Export");
@@ -51,12 +45,9 @@ public class Navbar extends JMenuBar{
 	// Events
 	openPokedex.addActionListener(e -> window.switchPanel("openPokedex"));
 	addToPokedex.addActionListener(e -> window.switchPanel("addToPokedex"));
-	editPokedex.addActionListener(e -> window.switchPanel("editPokedex"));
-	removeFromPokedex.addActionListener(e -> window.switchPanel("removeFromPokedex"));
 	
 	openTeam.addActionListener(e -> window.switchPanel("openPokedex"));
 	addToTeam.addActionListener(e -> window.switchPanel("openPokedex"));
-	removeFromTeam.addActionListener(e -> window.switchPanel("openPokedex"));
 	
 	exportPokedex.addActionListener(e -> window.switchPanel("exportPokedex"));
 	importPokedex.addActionListener(e -> window.switchPanel("importPokedex"));

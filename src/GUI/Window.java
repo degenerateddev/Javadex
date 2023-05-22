@@ -20,14 +20,11 @@ public class Window extends JFrame {
     JPanel cards;
     JLayeredPane layeredPane;
     
-    JPanel openPokédex = new OpenPokédexPanel();
-    JPanel addToPokédexPanel = new JPanel();
-    JPanel editPokédexPanel = new JPanel();
-    JPanel removeFromPokédexPanel = new JPanel();
+    JPanel openPokédex;
+    JPanel addToPokédex;
 	
     JPanel openTeam = new JPanel();
     JPanel addToTeam = new JPanel();
-    JPanel removeFromTeamPanel = new JPanel();
 	
     JPanel exportPokédex = new JPanel();
     JPanel importPokédex = new JPanel();
@@ -42,24 +39,14 @@ public class Window extends JFrame {
 	
 	db = new DB();
 	
+	openPokédex = new OpenPokédexPanel(db);
+	addToPokédex = new AddToPokédexPanel(db);
+	
 	this.setSize(800, 600);
 	
-//	layeredPane = new JLayeredPane();
-//	layeredPane.setLayout(new BorderLayout());
-//	this.setContentPane(layeredPane);
-	
-	BackgroundImage background = new BackgroundImage();
-//	layeredPane.add(background, Integer.valueOf(0));
-	this.setLayout(new BorderLayout());
-	this.setContentPane(background);
-	
-	cards = new JPanel(new CardLayout());
-	cards.setOpaque(false);
-	background.add(cards);
-//	layeredPane.add(cards, Integer.valueOf(1));
-	
-	cards.add(openPokédex, "openPokedex");
-	//this.getContentPane().add(cards);
+	this.add(new MainPane());
+	this.pack();
+	this.setLocationRelativeTo(null);
 	
 	Navbar bar = new Navbar(cards, this);
 	this.setJMenuBar(bar);
@@ -70,6 +57,37 @@ public class Window extends JFrame {
     public void switchPanel(String panelName) {
         CardLayout cardLayout = (CardLayout) cards.getLayout();
         cardLayout.show(cards, panelName);
-        System.out.println(panelName);
+    }
+    
+    public interface Navigatable {
+	enum View {
+	    MENU, CONTENT;
+	}
+	public void show(View view);
+    }
+    
+    public class MainPane extends JPanel implements Navigatable {
+	private BackgroundImage background;
+	private CardLayout cardLayout;
+	
+        public MainPane() {
+            setLayout(new BorderLayout());
+
+            background = new BackgroundImage();
+            background.setLayout(new CardLayout());
+            this.add(background);
+            
+            cards = new JPanel(new CardLayout());
+            cards.setOpaque(false);
+	
+            cards.add(openPokédex, "openPokedex");
+            cards.add(addToPokédex, "addToPokedex");
+            background.add(cards);
+        }
+
+        @Override
+        public void show(View view) {
+            cardLayout.show(background, view.name());
+        }
     }
 }

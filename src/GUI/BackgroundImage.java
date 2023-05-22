@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,7 +16,7 @@ public class BackgroundImage extends JComponent {
     public BackgroundImage() {
 	File bgimage = null;
 	
-	File directory = new File("src/bin/");	// shouldn't reference "src" in code (won't exist after exporting the project)
+	File directory = new File("bin/bin/");
 	
 	if (directory.isDirectory()) {
 	    File[] files = directory.listFiles();
@@ -37,6 +38,14 @@ public class BackgroundImage extends JComponent {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+    }
+    
+    @Override
+    public Dimension getPreferredSize() {
+        if (image != null) {
+            //return new Dimension(image.getWidth(), image.getHeight());
+        }
+        return new Dimension(800, 600);
     }
     
     @Override

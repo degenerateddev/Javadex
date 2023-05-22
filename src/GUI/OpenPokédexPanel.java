@@ -1,18 +1,17 @@
 package GUI;
 
-import java.awt.Color;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import database.DB;
+
 public class OpenPokédexPanel extends JPanel {
+    DB db;
     
-    OpenPokédexPanel() {
-	// tried doing transparent background but made no difference
+    OpenPokédexPanel(DB db) {
 	this.setOpaque(false);
-	//this.setBackground(new Color(255, 255, 255, 0));
 	
-	JButton pokémonButton = new JButton("Pokémon");
+	JButton pokémonButton = new JButton("Open");
 	this.add(pokémonButton);
     }
 }
