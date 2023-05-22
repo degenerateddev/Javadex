@@ -11,7 +11,7 @@ public class OpenPokédexPanel extends JPanel {
     OpenPokédexPanel(DB db) {
 	this.setOpaque(false);
 	
-	JButton pokémonButton = new JButton("Open");
+	JButton pokémonButton = new JButton("Open Pokédex");
 	this.add(pokémonButton);
     }
 }

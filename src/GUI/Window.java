@@ -23,16 +23,16 @@ public class Window extends JFrame {
     JPanel openPokédex;
     JPanel addToPokédex;
 	
-    JPanel openTeam = new JPanel();
-    JPanel addToTeam = new JPanel();
+    JPanel openTeam;
+    JPanel addToTeam;
 	
-    JPanel exportPokédex = new JPanel();
-    JPanel importPokédex = new JPanel();
+    JPanel exportPokédex;
+    JPanel importPokédex;
     
     public Window() {
 	addWindowListener(new WindowAdapter() {
 	    public void windowClosing (WindowEvent e) {
-		db.disconnect();
+		db.disconnectDB();
 		dispose();
 	    }
 	});
@@ -41,8 +41,13 @@ public class Window extends JFrame {
 	
 	openPokédex = new OpenPokédexPanel(db);
 	addToPokédex = new AddToPokédexPanel(db);
+	openTeam = new OpenTeamPanel(db);
+	addToTeam = new AddToTeamPanel(db);
+	exportPokédex = new ExportPokédexPanel(db);
+	importPokédex = new ImportPokédexPanel();
 	
 	this.setSize(800, 600);
+	this.setResizable(false);
 	
 	this.add(new MainPane());
 	this.pack();
@@ -82,6 +87,10 @@ public class Window extends JFrame {
 	
             cards.add(openPokédex, "openPokedex");
             cards.add(addToPokédex, "addToPokedex");
+            cards.add(openTeam, "openTeam");
+            cards.add(addToTeam, "addToTeam");
+            cards.add(exportPokédex, "exportPokedex");
+            cards.add(importPokédex, "importPokedex");
             background.add(cards);
         }
 

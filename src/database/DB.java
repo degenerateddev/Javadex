@@ -38,7 +38,7 @@ public class DB {
 		
 	    } else {
 		System.out.println("Creating pokedex table...");
-		setup("pokedex");
+		setupDB("pokedex");
 	    }
 	    
 	    ResultSet teamsResults = metadata.getTables(null, null, "teams", null);
@@ -47,7 +47,7 @@ public class DB {
 		
 	    } else {
 		System.out.println("Creating teams table...");
-		setup("teams");
+		setupDB("teams");
 	    }
 	    
 	    connected = true;
@@ -74,7 +74,7 @@ public class DB {
      * Database setup and base methods
      */
     
-    private void setup(String table) {
+    private void setupDB(String table) {
 	if (table.equals("pokedex")) {
 	    String sql = "CREATE TABLE pokemon (" +
 		    "id SERIAL PRIMARY KEY," +
@@ -115,7 +115,7 @@ public class DB {
 	}
     }
     
-    public void disconnect() {
+    public void disconnectDB() {
 	if (connected) {
 	    try {
 		connection.close();
@@ -160,7 +160,7 @@ public class DB {
      * Database CRUD operations
      */
     
-    public static ResultSet getAll() {
+    public static ResultSet getAllDB() {
 	String sql = "SELECT * FROM pokedex";
 	
 	try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -175,7 +175,7 @@ public class DB {
 	return null;
     }
     
-    public static void add(Pokémon pokémon) {
+    public static void addDB(Pokémon pokémon) {
 	String sql = "INSERT INTO pokedex (name, description, image, sound) VALUES (?, ?, ?)";
 	String name = pokémon.name;
 	String description = pokémon.description;
@@ -195,7 +195,7 @@ public class DB {
 	}
     }
     
-    public static void remove(Pokémon pokémon) {
+    public static void removeDB(Pokémon pokémon) {
 	String sql = "DELETE FROM pokedex WHERE id=" + pokémon.id;
     }
     
@@ -203,15 +203,27 @@ public class DB {
      * Fallback file methods
      */
     
-    public static void getAllFromFile(Pokémon pokémon) {
+    public static void getAllFile(Pokémon pokémon) {
 	
     }
     
-    public static void addToFile(Pokémon pokémon) {
+    public static void addFile(Pokémon pokémon) {
 	
     }
     
-    public static void removeFromFile(Pokémon pokémon) {
+    public static void removeFile(Pokémon pokémon) {
+	
+    }
+    
+    /*
+     * Data exporting
+     */
+    
+    public static void exportDB() {
+	
+    }
+    
+    public static void exportFile() {
 	
     }
 }

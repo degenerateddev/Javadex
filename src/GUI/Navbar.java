@@ -46,8 +46,8 @@ public class Navbar extends JMenuBar{
 	openPokedex.addActionListener(e -> window.switchPanel("openPokedex"));
 	addToPokedex.addActionListener(e -> window.switchPanel("addToPokedex"));
 	
-	openTeam.addActionListener(e -> window.switchPanel("openPokedex"));
-	addToTeam.addActionListener(e -> window.switchPanel("openPokedex"));
+	openTeam.addActionListener(e -> window.switchPanel("openTeam"));
+	addToTeam.addActionListener(e -> window.switchPanel("addToTeam"));
 	
 	exportPokedex.addActionListener(e -> window.switchPanel("exportPokedex"));
 	importPokedex.addActionListener(e -> window.switchPanel("importPokedex"));

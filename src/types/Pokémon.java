@@ -5,15 +5,6 @@ import java.sql.SQLException;
 
 import database.DB;
 
-enum Elements {
-    WATER,
-    FIRE,
-    EARTH
-}
-
-enum Attacks {
-    TACKLE
-}
 
 public class Pokémon {
     public final int id;
@@ -21,13 +12,23 @@ public class Pokémon {
     public final String description;
     public final String image;
     public final String sound;
-    public final Elements element;
+    public final Elements[] elements;
     public final Attacks[] attacks;
     public final int stage;
     public final Pokémon[] stages;
     public int health = 100;
     
-    public Pokémon(int id, String name, String description, String image, String sound, int health, Elements element, Attacks[] attacks, int stage, Pokémon[] stages) {
+    public enum Elements {
+	WATER,
+	FIRE,
+	EARTH
+    }
+
+    public enum Attacks {
+	TACKLE
+    }
+    
+    public Pokémon(int id, String name, String description, String image, String sound, int health, Elements elements[], Attacks[] attacks, int stage, Pokémon[] stages) {
 	//this.id = getID();
 	this.id = id;
 	this.name = name;
@@ -35,24 +36,24 @@ public class Pokémon {
 	this.image = image;
 	this.sound = sound;
 	this.health = health;
-	this.element = element;
+	this.elements = elements;
 	this.attacks = attacks;
 	this.stages = stages;
 	this.stage = stage;
     }
     
-    private int getID() {
-	DB db = new DB();
-	int length;
-	
-	try {
-	    length = db.getAll().getFetchSize();
-	    return length;
-	    
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-	
-	return 0;
-    }
+//    private int getID() {
+//	DB db = new DB();
+//	int length;
+//	
+//	try {
+//	    length = db.getAllDB().getFetchSize();
+//	    return length;
+//	    
+//	} catch (SQLException e) {
+//	    e.printStackTrace();
+//	}
+//	
+//	return 0;
+//    }
 }    
