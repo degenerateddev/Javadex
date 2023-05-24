@@ -4,15 +4,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import types.Pokémon;
+import types.Pokémon.Attacks;
+import types.Pokémon.Elements;
+import utils.Conversion;
 
 public class DB {
     String db = readEnv("POSTGRES_DB");
@@ -24,7 +29,7 @@ public class DB {
     static Connection connection;
     boolean connected = false;
     
-    public File fallbackFile = new File("data/fallbackFile.txt");
+    public static File fallbackFile = new File("data/fallbackFile.txt");
     
     public DB() {
 	try {
@@ -195,23 +200,77 @@ public class DB {
 	}
     }
     
-    public static void removeDB(Pokémon pokémon) {
-	String sql = "DELETE FROM pokedex WHERE id=" + pokémon.id;
+    public static void removeDB(int ID) {
+	String sql = "DELETE FROM pokedex WHERE id=" + Integer.toString(ID);
     }
     
     /*
      * Fallback file methods
      */
     
-    public static void getAllFile(Pokémon pokémon) {
+    public static ArrayList<Pokémon> getAllFile() {
+	ArrayList<Pokémon> allPokémon = new ArrayList<Pokémon>();
+	BufferedReader reader;
 	
+	try {
+	    reader = new BufferedReader(new FileReader(fallbackFile));
+	    String line = reader.readLine();
+	    
+	    while (line != null) {
+		/*
+		 * Example line from fallback file:
+		 * "Pikachu#Pikapikadescription#/home/user/image.png#/home/user/sound.wav#100#[WATER, EARTH]#[TACKLE, TESTATTACK]#0#[1337, 69]"
+		 */
+		String[] data = line.split("#");
+		
+		String name = data[0];
+		String description = data[1];
+		String image = data[2];
+		String sound = data[3];
+		int health = Integer.parseInt(data[4]);
+		
+		Pokémon.Elements[] elements = {};
+		String[] convertedElements = Conversion.stringToArray(data[5]);
+		for (int i = 0; i < convertedElements.length; i++) {
+		    elements[i] = Pokémon.Elements.valueOf(convertedElements[i]);
+		}
+		
+		Pokémon.Attacks[] attacks = {};
+		String[] convertedAttacks = Conversion.stringToArray(data[5]);
+		for (int i = 0; i < convertedAttacks.length; i++) {
+		    attacks[i] = Pokémon.Attacks.valueOf(convertedAttacks[i]);
+		}
+		
+		int stage = Integer.parseInt(data[7]);
+		
+		int[] stages = {};
+		String[] convertedStages = Conversion.stringToArray(data[8]);
+		for (int i = 0; i < convertedAttacks.length; i++) {
+		    stages[i] = Integer.parseInt(convertedStages[i]);
+		}
+		
+		Pokémon pokémon = new Pokémon(name, description, image, sound, health, elements, attacks, stage, stages);
+		allPokémon.add(pokémon);
+		
+		line = reader.readLine();
+	    }
+	    
+	    reader.close();
+	    
+	    return allPokémon;
+	    
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    
+	    return allPokémon;
+	}
     }
     
     public static void addFile(Pokémon pokémon) {
 	
     }
     
-    public static void removeFile(Pokémon pokémon) {
+    public static void removeFile(int ID) {
 	
     }
     

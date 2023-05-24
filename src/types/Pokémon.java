@@ -7,15 +7,14 @@ import database.DB;
 
 
 public class Pokémon {
-    public final int id;
     public final String name;
     public final String description;
     public final String image;
     public final String sound;
     public final Elements[] elements;
     public final Attacks[] attacks;
-    public final int stage;
-    public final Pokémon[] stages;
+    public final int stage;	// current stage index (0 for first evolution stage)
+    public final int[] stages;	// db pokémon IDs as references
     public int health = 100;
     
     public enum Elements {
@@ -28,9 +27,8 @@ public class Pokémon {
 	TACKLE
     }
     
-    public Pokémon(int id, String name, String description, String image, String sound, int health, Elements elements[], Attacks[] attacks, int stage, Pokémon[] stages) {
+    public Pokémon(String name, String description, String image, String sound, int health, Elements[] elements, Attacks[] attacks, int stage, int[] stages) {
 	//this.id = getID();
-	this.id = id;
 	this.name = name;
 	this.description = description;
 	this.image = image;
