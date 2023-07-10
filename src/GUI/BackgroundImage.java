@@ -16,7 +16,7 @@ public class BackgroundImage extends JComponent {
     public BackgroundImage() {
 	File bgimage = null;
 	
-	File directory = new File("bin/img/");
+	File directory = new File("static/");
 	
 	if (directory.isDirectory()) {
 	    File[] files = directory.listFiles();
