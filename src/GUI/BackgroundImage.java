@@ -16,7 +16,7 @@ public class BackgroundImage extends JComponent {
     public BackgroundImage() {
 	File bgimage = null;
 	
-	File directory = new File("bin/bin/");
+	File directory = new File("bin/img/");
 	
 	if (directory.isDirectory()) {
 	    File[] files = directory.listFiles();
@@ -28,9 +28,11 @@ public class BackgroundImage extends JComponent {
 		
 	    } else {
 		System.out.println("No images!");
+		return;
 	    }
 	} else {
 	    System.out.println("Not a directory!");
+	    return;
 	}
 	
 	try {

@@ -20,21 +20,22 @@ import types.Pokémon.Elements;
 import utils.Conversion;
 
 public class DB {
-    String db = readEnv("POSTGRES_DB");
-    String username = readEnv("POSTGRES_USER");
-    String password = readEnv("POSTGRES_PASSWORD");
+	// just gonna use SQLite lmao
+    String db = readEnv("SQLITE_DB");
+    String username = readEnv("SQLITE_USER");
+    String password = readEnv("SQLITE_PASSWORD");
     
-    String dbUrl = "jdbc:postgresql://0.0.0.0:1337/" + db;
+    String dbUrl = "jdbc:sqlite:" + db;
     
     static Connection connection;
-    boolean connected = false;
     
-    public static File fallbackFile = new File("data/fallbackFile.txt");
+    private boolean connected;
     
     public DB() {
 	try {
 	    connection = DriverManager.getConnection(dbUrl, username, password);
 	    System.out.println("Database connection established...");
+	    connected = true;
 	    
 	    DatabaseMetaData metadata = connection.getMetaData();
 	    ResultSet pokedexResults = metadata.getTables(null, null, "pokedex", null);
@@ -55,23 +56,8 @@ public class DB {
 		setupDB("teams");
 	    }
 	    
-	    connected = true;
-	    
 	} catch (SQLException e) {
-	    System.out.println("Could not find running PostgreSQL database...");
-	    System.out.println("Using fallback text file");
-	    
-	    try {
-		if (fallbackFile.createNewFile()) {
-		    System.out.println("Fallback file created");
-		} else {
-		    System.out.println("Fallback file found");
-		}
-		
-	    } catch (IOException e1) {
-		e1.printStackTrace();
-		System.exit(0);
-	    }
+	    e.printStackTrace();
 	}
     }
     
@@ -94,11 +80,11 @@ public class DB {
 		    ")";
 	    
 	    try (Statement statement = connection.createStatement()) {
-		statement.executeUpdate(sql);
-		System.out.println("Pokemon table created successfully!");
+	    	statement.executeUpdate(sql);
+	    	System.out.println("Pokemon table created successfully!");
 		
 	    } catch (SQLException e) {
-		e.printStackTrace();
+	    	e.printStackTrace();
 	    }
 	    
 	} else if (table.equals("teams")) {
@@ -155,7 +141,8 @@ public class DB {
 	    reader.close();
 	    
 	} catch (Exception e) {
-	    e.printStackTrace();
+		System.out.println("Could not find .env file!");
+	    return "";
 	}
 	
 	return result;
@@ -208,7 +195,7 @@ public class DB {
      * Fallback file methods
      */
     
-    public static ArrayList<Pokémon> getAllFile() {
+    /*public static ArrayList<Pokémon> getAllFile() {
 	ArrayList<Pokémon> allPokémon = new ArrayList<Pokémon>();
 	BufferedReader reader;
 	
@@ -217,10 +204,7 @@ public class DB {
 	    String line = reader.readLine();
 	    
 	    while (line != null) {
-		/*
-		 * Example line from fallback file:
-		 * "Pikachu#Pikapikadescription#/home/user/image.png#/home/user/sound.wav#100#[WATER, EARTH]#[TACKLE, TESTATTACK]#0#[1337, 69]"
-		 */
+		//"Pikachu#Pikapikadescription#/home/user/image.png#/home/user/sound.wav#100#[WATER, EARTH]#[TACKLE, TESTATTACK]#0#[1337, 69]"
 		String[] data = line.split("#");
 		
 		String name = data[0];
@@ -264,25 +248,13 @@ public class DB {
 	    
 	    return allPokémon;
 	}
-    }
-    
-    public static void addFile(Pokémon pokémon) {
-	
-    }
-    
-    public static void removeFile(int ID) {
-	
-    }
+    }*/
     
     /*
      * Data exporting
      */
     
     public static void exportDB() {
-	
-    }
-    
-    public static void exportFile() {
 	
     }
 }

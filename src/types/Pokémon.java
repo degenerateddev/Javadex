@@ -20,7 +20,22 @@ public class Pokémon {
     public enum Elements {
 	WATER,
 	FIRE,
-	EARTH
+	ROCK,
+    DARK,
+    DRAGON,
+    STEEL,
+    FAIRY,
+    GHOST,
+    PSYCHIC,
+    NORMAL,
+    FIGHTING,
+    POISON,
+    GROUND,
+    ELECTRIC,
+    ICE,
+    BUG,
+    FLYING,
+    GRASS
     }
 
     public enum Attacks {
