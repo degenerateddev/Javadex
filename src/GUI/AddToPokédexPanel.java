@@ -8,22 +8,28 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.ResultSet;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import database.DB;
 import types.Pokémon;
+import types.Pokémon.Elements;
 
 public class AddToPokédexPanel extends JPanel {
-    DB db;
-    Pokémon pokémon = new Pokémon();;
+    DB db = new DB();
+    Pokémon pokémon = new Pokémon();
+    ResultSet pokémonList = db.getAllDB();
     
     AddToPokédexPanel(DB db) {
         this.setLayout(new GridBagLayout());
@@ -54,13 +60,13 @@ public class AddToPokédexPanel extends JPanel {
         this.add(descriptionLabel, constraints);
         JTextArea description = new JTextArea();
         description.setFont(new Font("Arial", Font.PLAIN, 15));
-        description.setRows(4);  // Adjust the number of rows as desired
-        JScrollPane scrollPane = new JScrollPane(description);
+        description.setRows(4);
+        JScrollPane descriptionScrollPane = new JScrollPane(description);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.BOTH;
-        this.add(scrollPane, constraints);
+        this.add(descriptionScrollPane, constraints);
         
         JLabel healthLabel = new JLabel("Health:");
         healthLabel.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -82,10 +88,15 @@ public class AddToPokédexPanel extends JPanel {
         constraints.gridy = 2;
         constraints.gridwidth = 1;
         this.add(elementsLabel, constraints);
-        JComboBox<Pokémon.Elements> elementsChoice = new JComboBox<Pokémon.Elements>(Pokémon.Elements.values());
+        JList<Pokémon.Elements> elementsList = new JList<>(Pokémon.Elements.values());
+        elementsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        elementsList.setVisibleRowCount(4);
+        JScrollPane elementsScrollPane = new JScrollPane(elementsList);
         constraints.gridx = 1;
         constraints.gridy = 2;
-        this.add(elementsChoice, constraints);
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        this.add(elementsScrollPane , constraints);
         
         JLabel attacksLabel = new JLabel("Attacks:");
         attacksLabel.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -93,10 +104,15 @@ public class AddToPokédexPanel extends JPanel {
         constraints.gridx = 0;
         constraints.gridy = 3;
         this.add(attacksLabel, constraints);
-        JComboBox<Pokémon.Attacks> attacksChoice = new JComboBox<Pokémon.Attacks>(Pokémon.Attacks.values());
+        JList<Pokémon.Attacks> attacksList = new JList<>(Pokémon.Attacks.values());
+        attacksList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        attacksList.setVisibleRowCount(4);
+        JScrollPane attacksScrollPane = new JScrollPane(attacksList);
         constraints.gridx = 1;
         constraints.gridy = 3;
-        this.add(attacksChoice, constraints);
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        this.add(attacksScrollPane, constraints);
         
         JLabel stageLabel = new JLabel("Stage:");
         stageLabel.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -117,11 +133,7 @@ public class AddToPokédexPanel extends JPanel {
         constraints.gridx = 0;
         constraints.gridy = 6;
         this.add(linkedStagesLabel, constraints);
-        JComboBox<Integer> linkedStagesChoice = new JComboBox<Integer>();
-        linkedStagesChoice.addItem(1);
-        linkedStagesChoice.addItem(2);
-        linkedStagesChoice.addItem(3);
-        // Add more linked stages as needed
+        JList<Integer> linkedStagesChoice = new JList<Integer>();
         constraints.gridx = 1;
         constraints.gridy = 6;
         this.add(linkedStagesChoice, constraints);
@@ -178,6 +190,11 @@ public class AddToPokédexPanel extends JPanel {
         	pokémon.description = description.getText();
         	pokémon.health = Integer.parseInt(health.getText());
         	pokémon.stage = Integer.parseInt(stage.getText());
+        	
+        	List<Pokémon.Elements> selectedElements = elementsList.getSelectedValuesList();
+        	pokémon.elements = selectedElements;
+        	List<Pokémon.Attacks> selectedAttacks = attacksList.getSelectedValuesList();
+        	pokémon.attacks = selectedAttacks;
         	System.out.println(pokémon);
             }
         });

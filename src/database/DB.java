@@ -20,7 +20,6 @@ import types.Pokémon.Elements;
 import utils.Conversion;
 
 public class DB {
-	// just gonna use SQLite lmao
     String db = readEnv("SQLITE_DB");
     String username = readEnv("SQLITE_USER");
     String password = readEnv("SQLITE_PASSWORD");
@@ -58,6 +57,7 @@ public class DB {
 	    
 	} catch (SQLException e) {
 	    e.printStackTrace();
+	    System.exit(0);
 	}
     }
     
@@ -67,16 +67,18 @@ public class DB {
     
     private void setupDB(String table) {
 	if (table.equals("pokedex")) {
-	    String sql = "CREATE TABLE pokemon (" +
-		    "id SERIAL PRIMARY KEY," +
-		    "name VARCHAR(255) NOT NULL," +
-		    "description VARCHAR(255) NOT NULL," +
-		    "image VARCHAR(255) NOT NULL," +
-		    "sound VARCHAR(255) NOT NULL," +
-		    "health INT," +
-		    "element VARCHAR(255) NOT NULL," +
-		    "stage INT," +
-		    "FOREIGN KEY (stage) REFERENCES pokemon(id)" +
+	    String sql = "CREATE TABLE IF NOT EXISTS pokemon (" +
+		    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+		    "name TEXT NOT NULL," +
+		    "description TEXT NOT NULL," +
+		    "image TEXT NOT NULL," +
+		    "sound TEXT NOT NULL," +
+		    "level INTEGER," +
+		    "health INTEGER," +
+		    "elements TEXT NOT NULL," +
+		    "attacks, TEXT NOT NULL," +
+		    "stage INTEGER," +
+		    "stages TEXT" +	// comma separated list of IDs to pokemons
 		    ")";
 	    
 	    try (Statement statement = connection.createStatement()) {
@@ -88,11 +90,11 @@ public class DB {
 	    }
 	    
 	} else if (table.equals("teams")) {
-	    String sql = "CREATE TABLE team (" +
-		    "id SERIAL PRIMARY KEY," +
-		    "name VARCHAR(255) NOT NULL," +
-		    "pokemon_id INT," +
-		    "FOREIGN KEY (pokemon_id) REFERENCES pokemon(id)" +
+	    String sql = "CREATE TABLE IF NOT EXISTS team (" +
+		    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+		    "name TEXT NOT NULL," +
+		    "member_id INTEGER," +
+		    "FOREIGN KEY (member_id) REFERENCES pokemon(id)" +
 		    ")";
 	    
 	    try (Statement statement = connection.createStatement()) {
@@ -152,7 +154,7 @@ public class DB {
      * Database CRUD operations
      */
     
-    public static ResultSet getAllDB() {
+    public ResultSet getAllDB() {
 	String sql = "SELECT * FROM pokedex";
 	
 	try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -167,7 +169,7 @@ public class DB {
 	return null;
     }
     
-    public static ResultSet getAllTeamsDB() {
+    public ResultSet getAllTeamsDB() {
 	String sql = "SELECT * FROM teams";
 	
 	try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -182,7 +184,7 @@ public class DB {
 	return null;
     }
     
-    public static ResultSet getPokémon(int id) {
+    public ResultSet getPokémon(int id) {
 	String sql = "SELECT * FROM pokedex WHERE id=?";
 	
 	try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -199,7 +201,7 @@ public class DB {
 	return null;
     }
     
-    public static void addDB(Pokémon pokémon) {
+    public void addDB(Pokémon pokémon) {
 	String sql = "INSERT INTO pokedex (name, description, image, sound) VALUES (?, ?, ?)";
 	String name = pokémon.name;
 	String description = pokémon.description;
@@ -219,7 +221,7 @@ public class DB {
 	}
     }
     
-    public static void removeDB(int ID) {
+    public void removeDB(int ID) {
 	String sql = "DELETE FROM pokedex WHERE id=" + Integer.toString(ID);
     }
     
@@ -286,7 +288,7 @@ public class DB {
      * Data exporting
      */
     
-    public static void exportDB() {
+    public void exportDB() {
 	
     }
 }
