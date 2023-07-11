@@ -7,39 +7,43 @@ import database.DB;
 
 
 public class Pokémon {
-    public final String name;
-    public final String description;
-    public final String image;
-    public final String sound;
-    public final Elements[] elements;
-    public final Attacks[] attacks;
-    public final int stage;	// current stage index (0 for first evolution stage)
-    public final int[] stages;	// db pokémon IDs as references
+    public String name;
+    public String description;
+    public String image;
+    public String sound;
+    public Elements[] elements;
+    public Attacks[] attacks;
+    public int stage;	// current stage index (0 for first evolution stage)
+    public int[] stages;	// db pokémon IDs as references
     public int health = 100;
     
     public enum Elements {
 	WATER,
 	FIRE,
 	ROCK,
-    DARK,
-    DRAGON,
-    STEEL,
-    FAIRY,
-    GHOST,
-    PSYCHIC,
-    NORMAL,
-    FIGHTING,
-    POISON,
-    GROUND,
-    ELECTRIC,
-    ICE,
-    BUG,
-    FLYING,
-    GRASS
+	DARK,
+	DRAGON,
+	STEEL,
+	FAIRY,
+	GHOST,
+	PSYCHIC,
+	NORMAL,
+	FIGHTING,
+	POISON,
+	GROUND,
+	ELECTRIC,
+	ICE,
+	BUG,
+	FLYING,
+	GRASS
     }
 
     public enum Attacks {
 	TACKLE
+    }
+    
+    public Pokémon() {
+	
     }
     
     public Pokémon(String name, String description, String image, String sound, int health, Elements[] elements, Attacks[] attacks, int stage, int[] stages) {

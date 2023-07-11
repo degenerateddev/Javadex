@@ -167,6 +167,38 @@ public class DB {
 	return null;
     }
     
+    public static ResultSet getAllTeamsDB() {
+	String sql = "SELECT * FROM teams";
+	
+	try (PreparedStatement statement = connection.prepareStatement(sql)) {
+	    ResultSet data = statement.executeQuery(sql);
+	    System.out.println(data);
+	    return data;
+	    
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	
+	return null;
+    }
+    
+    public static ResultSet getPokémon(int id) {
+	String sql = "SELECT * FROM pokedex WHERE id=?";
+	
+	try (PreparedStatement statement = connection.prepareStatement(sql)) {
+	    statement.setInt(1, id);
+	    
+	    ResultSet data = statement.executeQuery(sql);
+	    System.out.println(data);
+	    return data;
+	    
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	
+	return null;
+    }
+    
     public static void addDB(Pokémon pokémon) {
 	String sql = "INSERT INTO pokedex (name, description, image, sound) VALUES (?, ?, ?)";
 	String name = pokémon.name;
